@@ -2,7 +2,7 @@
 
 import alfred
 import calendar
-from delorean import utcnow, parse, epoch
+from delorean import Delorean, utcnow, parse, epoch
 
 def process(query_str):
     """ Entry point """
@@ -43,7 +43,7 @@ def alfred_items_for_value(value):
         title=str(item_value),
         subtitle=u'UTC Timestamp',
         attributes={
-            'uid': alfred.uid(index), 
+            'uid': alfred.uid(index),
             'arg': item_value,
         },
         icon='icon.png',
@@ -55,9 +55,9 @@ def alfred_items_for_value(value):
         # 1937-01-01 12:00:27
         ("%Y-%m-%d %H:%M:%S", ''),
         # 19 May 2002 15:21:36
-        ("%d %b %Y %H:%M:%S", ''), 
+        ("%d %b %Y %H:%M:%S", ''),
         # Sun, 19 May 2002 15:21:36
-        ("%a, %d %b %Y %H:%M:%S", ''), 
+        ("%a, %d %b %Y %H:%M:%S", ''),
         # 1937-01-01T12:00:27
         ("%Y-%m-%dT%H:%M:%S", ''),
         # 1996-12-19T16:39:57-0800
@@ -69,12 +69,24 @@ def alfred_items_for_value(value):
             title=str(item_value),
             subtitle=description,
             attributes={
-                'uid': alfred.uid(index), 
+                'uid': alfred.uid(index),
                 'arg': item_value,
             },
         icon='icon.png',
         ))
         index += 1
+
+    item_value = value.shift("Europe/Berlin").datetime.strftime("%d %b %Y %H:%M:%S")
+    results.append(alfred.Item(
+        title=str(item_value),
+        subtitle=u'German time format',
+        attributes={
+            'uid': alfred.uid(index),
+            'arg': item_value,
+        },
+        icon='icon.png',
+    ))
+    index += 1
 
     return results
 
